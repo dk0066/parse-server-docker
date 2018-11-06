@@ -15,15 +15,23 @@ services:
   #   command: mongod --dbpath /data/db --replSet ps_set --smallfiles --oplogSize 128
   mongo:
     image: mongo
-    volumes:
-      - ~/data/db:/data/db
   parse-server:
     image: dklin/parse-server
     ports:
-    - "80:1337"
+      - "1337:1337"
     environment:
       PARSE_SERVER_APPLICATION_ID: test-app
-      PARSE_SERVER_MASTER_KEY: TEST-MARTER-KEY
+      PARSE_SERVER_MASTER_KEY: TEST
       PARSE_SERVER_DATABASE_URI: mongodb://mongo/test
     depends_on:
       - mongo
+  parse-dashboard:
+    ports:
+      - 4040:4040
+    environment:
+      PARSE_DASHBOARD_SERVER_URL: http://parse-server:1337/parse
+      PARSE_DASHBOARD_MASTER_KEY: TEST
+      PARSE_DASHBOARD_APP_ID: test-app
+      PARSE_DASHBOARD_APP_NAME: TestApp
+    depends_on:
+      - parse-server
