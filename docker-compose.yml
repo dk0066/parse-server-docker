@@ -1,0 +1,29 @@
+version: '3'
+services:
+  # mongo:
+  #   image: mongo:4.0.3
+  #   volumes:
+  #     - ~/data/db/replset/mongo-rs1:/data/db
+  #   command: mongod --dbpath /data/db --replSet ps_set --oplogSize 128 --bind_ip_all
+  # mongo-rs2:
+  #   image: mongo:4.0.3
+  #   volumes:
+  #     - ~/data/db/replset/mongo-rs2:/data/db
+  #   command: mongod --dbpath /data/db --replSet ps_set --oplogSize 128 --bind_ip_all
+  # mongo-arbiter:
+  #   image: mongo:4.0.3
+  #   command: mongod --dbpath /data/db --replSet ps_set --smallfiles --oplogSize 128
+  mongo:
+    image: mongo
+    volumes:
+      - ~/data/db:/data/db
+  parse-server:
+    image: dklin/parse-server
+    ports:
+    - "80:1337"
+    environment:
+      PARSE_SERVER_APPLICATION_ID: test-app
+      PARSE_SERVER_MASTER_KEY: TEST-MARTER-KEY
+      PARSE_SERVER_DATABASE_URI: mongodb://mongo/test
+    depends_on:
+      - mongo
