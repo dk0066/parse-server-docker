@@ -26,12 +26,15 @@ services:
     depends_on:
       - mongo
   parse-dashboard:
+    image: parse-dashboard
     ports:
-      - 4040:4040
+      - 8080:4040
     environment:
       PARSE_DASHBOARD_SERVER_URL: http://parse-server:1337/parse
       PARSE_DASHBOARD_MASTER_KEY: TEST
       PARSE_DASHBOARD_APP_ID: test-app
       PARSE_DASHBOARD_APP_NAME: TestApp
+      PARSE_DASHBOARD_USER_ID: "dk"
+      PARSE_DASHBOARD_USER_PASSWORD: "passw0rd"
     depends_on:
       - parse-server
